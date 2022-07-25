@@ -2,15 +2,15 @@
 import "./ButtonMenu.scss";
 import React, { useEffect } from 'react'
 import { Button, TextField, Select, SelectChangeEvent, FormControl, MenuItem, InputLabel, Modal, Box, Typography } from '@mui/material';
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { User } from '../../Models/user.ts';
-import user from "../../Reducers/user";
-import { createTheme } from '@mui/material/styles';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { actionExecuted } from "../../Actions/user.tsx";
 
 const UserTable = () => {
 
+    const dispatch = useDispatch();
 
     const selectedUser = useSelector((state: any) => state.selectedUser);
     const [userData, setUserData] = React.useState<User>(new User());
@@ -37,14 +37,20 @@ const UserTable = () => {
             // DELETE request using fetch with error handling
             fetch('https://gorest.co.in/public/v2/users/' + selectedUser.id, requestOptions)
                 .then(async response => {
-                    const data = await response.json();
+                    let data: any = await response.text();
+                    data = data ? JSON.parse(data) : {}
                     // check for error response
                     if (!response.ok) {
                         // get error message from body or default to response status
-                        toast('There was an error!: ' + data[0].field + " - " + data[0].message);
+                        if (data[0]) {
+                            toast('There was an error!: ' + data[0].field + " - " + data[0].message);
+                        } else if (data) {
+                            toast('There was an error!: ' + data.message);
+                        }
                         const error = (data && data.message) || response.status;
                         return Promise.reject(error);
                     }
+                    dispatch(actionExecuted('DELETE'));
                     toast('User deleted');
                 })
                 .catch(error => {
@@ -74,11 +80,16 @@ const UserTable = () => {
                 // check for error response
                 if (!response.ok) {
                     // get error message from body or default to response status
-                    console.log(data);
-                    toast('There was an error!: ' + data[0].field + " - " + data[0].message);
+                    if (data[0]) {
+                        toast('There was an error!: ' + data[0].field + " - " + data[0].message);
+                    } else if (data) {
+                        toast('There was an error!: ' + data.message);
+                    }
                     const error = (data && data.message) || response.status;
                     return Promise.reject(error);
                 }
+
+                dispatch(actionExecuted('POST'));
                 toast('User added');
             })
             .catch(error => {
@@ -107,10 +118,15 @@ const UserTable = () => {
                     // check for error response
                     if (!response.ok) {
                         // get error message from body or default to response status
-                        toast('There was an error!: ' + data[0].field + " - " + data[0].message);
+                        if (data[0]) {
+                            toast('There was an error!: ' + data[0].field + " - " + data[0].message);
+                        } else if (data) {
+                            toast('There was an error!: ' + data.message);
+                        }
                         const error = (data && data.message) || response.status;
                         return Promise.reject(error);
                     }
+                    dispatch(actionExecuted('UPDATE'));
                     toast('User updated');
                 })
                 .catch(error => {
@@ -145,7 +161,6 @@ const UserTable = () => {
             ...userData,
             ...{ status: event.target.value as string }
         });
-        console.log(userData);
     };
 
     const style = {

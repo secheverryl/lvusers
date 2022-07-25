@@ -8,6 +8,16 @@ const selectedUserReducer = (selectedUser = null, action) => {
     return selectedUser;
 }
 
+const actionExecutedReducer = (actionExecuted = null, action) => {
+
+    if (action.type === 'ACTION_EXECUTED') {
+        return action.payload;
+    }
+
+    return actionExecuted;
+}
+
 export default combineReducers({
-    selectedUser: selectedUserReducer
+    selectedUser: selectedUserReducer,
+    actionExecuted: actionExecutedReducer
 });

@@ -16,3 +16,14 @@ export const selectUser = (user: User) => {
         }
     }
 };
+
+// Action Creator
+export const actionExecuted = (action: any) => {
+    if (action) {
+        // Return the action
+        return {
+            type: 'ACTION_EXECUTED',
+            payload: action
+        }
+    }
+};

@@ -1,10 +1,10 @@
 
 import "./UserTable.scss";
-import React from 'react'
+import React, { useEffect } from 'react'
 import useFetch from "react-fetch-hook";
 import { DataGrid, GridColDef, GridRowId } from '@mui/x-data-grid';
 import { selectUser } from '../../Actions/user.tsx';
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { User } from "../../Models/user.ts";
 
 
@@ -12,9 +12,17 @@ const UserTable = () => {
 
     const dispatch = useDispatch();
 
+    const actionExecuted = useSelector((state: any) => state.actionExecuted);
+
     const { isLoading, data, error } = useFetch(
         "https://gorest.co.in/public/v2/users"
     );
+
+    useEffect(() => {
+        console.log(actionExecuted);
+    }, [actionExecuted]);
+
+
 
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', width: 70 },

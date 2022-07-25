@@ -1,16 +1,18 @@
-// Action Creator
-export const selectUser = (id: number) => {
-    // Return the action
-    return {
-        type: 'USER_SELECTED',
-        payload: id
-    }
-};
+import { User } from "../Models/user";
 
-export const userDataLoaded = (hasLoaded: boolean) => {
-    // Return the action
-    return {
-        type: 'USER_DATA_LOADED',
-        payload: hasLoaded
+// Action Creator
+export const selectUser = (user: User) => {
+    if (user) {
+        // Return the action
+        return {
+            type: 'USER_SELECTED',
+            payload: user
+        }
+    } else {
+        // Return the action
+        return {
+            type: 'USER_SELECTED',
+            payload: null
+        }
     }
 };

@@ -5,4 +5,13 @@
 
 .buttton-element {
     margin-left: 20px !important;
+    &-modal {
+        margin-top: 20px !important;
+        margin-left: 25px !important;
+    }
+}
+
+//Reference: https://github.com/mui/mui-x/issues/1904
+.MuiDataGrid-root .MuiDataGrid-columnHeaderCheckbox .MuiDataGrid-columnHeaderTitleContainer {
+    display: none;
 }

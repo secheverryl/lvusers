@@ -5,6 +5,7 @@ import useFetch from "react-fetch-hook";
 import { DataGrid, GridColDef, GridRowId } from '@mui/x-data-grid';
 import { selectUser } from '../../Actions/user.tsx';
 import { useDispatch } from 'react-redux'
+import { User } from "../../Models/user.ts";
 
 
 const UserTable = () => {
@@ -29,14 +30,22 @@ const UserTable = () => {
         if (selection.length > 1) {
             const selectionSet = new Set(selectionModel);
             const result = selection.filter((s) => !selectionSet.has(s));
-
             setSelectionModel(result);
-            dispatch(selectUser(result));
-        } else {
-            setSelectionModel(selection);
-            dispatch(selectUser(selection));
-        }
 
+            const dataval: Array<any> = data as any;
+            const selectedRowData: User = dataval.find((row) =>
+                row.id == result[0]
+            );
+            dispatch(selectUser(selectedRowData));
+        } else {
+
+            setSelectionModel(selection);
+            const dataval: Array<any> = data as any;
+            const selectedRowData: User = dataval.find((row) =>
+                row.id == selection[0]
+            );
+            dispatch(selectUser(selectedRowData));
+        }
     }
 
     return (
